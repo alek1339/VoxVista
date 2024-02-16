@@ -1,21 +1,24 @@
-import { RegisterFormComponent } from './RegisterFormTypes';
-import { useState } from "react";
+import { RegisterFormComponent, RegisterState } from './RegisterFormTypes';
+import useFormInput from '../../hooks/useFormInput';
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import { registerUser } from "../../store/reducers/userSlice";
 
 const RegisterForm: RegisterFormComponent = () => {
     const dispatch = useAppDispatch();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const { formData, handleInputChange } = useFormInput<RegisterState>({
+        username: "",
+        password: "",
+        confirmPassword: ""
+    });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const userdata = {
-            username: username,
-            password: password,
-            confirmPassword: confirmPassword
+            username: formData.username,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword
         };
+
         dispatch(
             registerUser({
                 username: userdata.username,
@@ -23,15 +26,13 @@ const RegisterForm: RegisterFormComponent = () => {
                 password2: userdata.confirmPassword
             })
         );
-        console.log("User data", userdata);
     };
-
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
-            <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-            <input type="password" onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm Password" />
+            <input type="text" name='username' onChange={e => handleInputChange(e)} placeholder="Username" />
+            <input type="password" name='password' onChange={e => handleInputChange(e)} placeholder="Password" />
+            <input type="password" name="confirmPassword" onChange={e => handleInputChange(e)} placeholder="Confirm Password" />
             <button type="submit">Register</button>
         </form>
     );

@@ -1,11 +1,11 @@
 import React from "react";
 
-export interface RegisterFormProps {
-    // Props, if any
-}
+export interface RegisterFormProps {}
 
 export interface RegisterState {
-    // Component state, if any
+    username: string;
+    password: string;
+    confirmPassword: string;
 }
 
 export type RegisterFormComponent = React.FC<RegisterFormProps>;
