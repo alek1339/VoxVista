@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Languages = require("../constants/constants");
 
 // Create Schema
 const UserSchema = new Schema({
@@ -10,6 +11,42 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    email: {
+        type: String,
+        default: ""
+    },
+    firstName: {
+        type: String,
+        default: ""
+    },
+    lastName: {
+        type: String,
+        default: ""
+    },
+    dailyStreak: {
+        type: Number,
+        default: 0
+    },
+    primaryLanguage: {
+        type: String,
+        default: Languages.ENGLISH
+    },
+    learningLanguage: {
+        type: String,
+        default: Languages.GERMAN
+    },
+    learnedLessons: {
+        type: Array,
+        default: []
+    },
+    forReview: {
+        type: Array,
+        default: []
+    },
+    isProUser: {
+        type: Boolean,
+        default: false
     },
     date: {
         type: Date,
