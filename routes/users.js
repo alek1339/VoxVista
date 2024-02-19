@@ -1,16 +1,17 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Load User model
 const User = require("../models/User");
 
-// @route   GET api/users/test
+// @route   GET users/test
 // @desc    Tests users route
 // @access  Public
 router.get("/test", (req, res) => res.json({ msg: "Users Works" }));
 
-// @route  GET api/posts/register
+// @route  GET user/register
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
