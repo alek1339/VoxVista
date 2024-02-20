@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch } from "../store"; // Update the path accordingly
+import { AppDispatch } from "../store";
 
 interface UserState {
-  user: UserData | null; // Replace 'any' with the actual type of user data
+  user: UserData | null;
   error: string | null;
 }
 
 interface UserData {
-  // Define the structure of your user data
   username: string;
   password: string;
   password2: string;
@@ -36,7 +35,6 @@ export const { setUser, setAuthError } = userSlice.actions;
 export const registerUser =
   (userData: UserData) => async (dispatch: AppDispatch) => {
     try {
-      // Register the user by making an API request
       const response = await fetch("http://localhost:5000/users/register", {
         method: "POST",
         body: JSON.stringify(userData),
@@ -55,8 +53,8 @@ export const registerUser =
       }
       return data;
     } catch (error) {
+      // TODO: Handle registration failure (e.g., show an error message) and remove console.log
       console.error("Registration failed", error);
-      // TODO: Handle registration failure (e.g., show an error message)
     }
   };
 
