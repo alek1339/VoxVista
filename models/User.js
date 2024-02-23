@@ -4,54 +4,58 @@ const Languages = require("../constants/constants");
 
 // Create Schema
 const UserSchema = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        default: ""
-    },
-    firstName: {
-        type: String,
-        default: ""
-    },
-    lastName: {
-        type: String,
-        default: ""
-    },
-    dailyStreak: {
-        type: Number,
-        default: 0
-    },
-    primaryLanguage: {
-        type: String,
-        default: Languages.ENGLISH
-    },
-    learningLanguage: {
-        type: String,
-        default: Languages.GERMAN
-    },
-    learnedLessons: {
-        type: Array,
-        default: []
-    },
-    forReview: {
-        type: Array,
-        default: []
-    },
-    isProUser: {
-        type: Boolean,
-        default: false
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    },
-})
+  username: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    default: "",
+  },
+  firstName: {
+    type: String,
+    default: "",
+  },
+  lastName: {
+    type: String,
+    default: "",
+  },
+  dailyStreak: {
+    type: Number,
+    default: 0,
+  },
+  primaryLanguage: {
+    type: String,
+    default: Languages.ENGLISH,
+  },
+  learningLanguage: {
+    type: String,
+    default: Languages.GERMAN,
+  },
+  learnedLessons: {
+    type: Array,
+    default: [],
+  },
+  forReview: {
+    type: Array,
+    default: [],
+  },
+  isProUser: {
+    type: Boolean,
+    default: false,
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 module.exports = User = mongoose.model("users", UserSchema);
