@@ -9,20 +9,10 @@ import "./index.css";
 import Login from "./pages/login/Login.tsx";
 import Register from "./pages/register/Register.tsx";
 import Home from "./pages/home/Home.tsx";
-import Admin from "./pages/admin/Admin.tsx";
+import Admin from "./admin/Admin.tsx";
 import NotFound from "./pages/notFound/NotFound.tsx";
 
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
-
-const user = {
-  username: "user",
-  isAdmin: false,
-};
-
-const admin = {
-  username: "admin",
-  isAdmin: true,
-};
 
 const router = createBrowserRouter([
   {
@@ -32,7 +22,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <ProtectedRoute user={user}>
+          <ProtectedRoute>
             <Home />
           </ProtectedRoute>
         ),
@@ -40,7 +30,7 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: (
-          <ProtectedRoute user={user} fromLoginOrRegister={true}>
+          <ProtectedRoute fromLoginOrRegister={true}>
             <Register />
           </ProtectedRoute>
         ),
@@ -48,7 +38,7 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: (
-          <ProtectedRoute user={user} fromLoginOrRegister={true}>
+          <ProtectedRoute fromLoginOrRegister={true}>
             <Login />
           </ProtectedRoute>
         ),
@@ -56,7 +46,7 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: (
-          <ProtectedRoute user={admin} isAdminRoute={true}>
+          <ProtectedRoute isAdminRoute={true}>
             <Admin />
           </ProtectedRoute>
         ),
