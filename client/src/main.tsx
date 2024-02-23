@@ -9,7 +9,20 @@ import "./index.css";
 import Login from "./pages/login/Login.tsx";
 import Register from "./pages/register/Register.tsx";
 import Home from "./pages/home/Home.tsx";
+import Admin from "./pages/admin/Admin.tsx";
 import NotFound from "./pages/notFound/NotFound.tsx";
+
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
+
+const user = {
+  username: "user",
+  isAdmin: false,
+};
+
+const admin = {
+  username: "admin",
+  isAdmin: true,
+};
 
 const router = createBrowserRouter([
   {
@@ -18,17 +31,36 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <ProtectedRoute user={user}>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/register",
-        element: <Register />,
+        element: (
+          <ProtectedRoute user={user} fromLoginOrRegister={true}>
+            <Register />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <ProtectedRoute user={user} fromLoginOrRegister={true}>
+            <Login />
+          </ProtectedRoute>
+        ),
       },
-      // Not found 404
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute user={admin} isAdminRoute={true}>
+            <Admin />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "*",
         element: <NotFound />,

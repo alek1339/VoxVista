@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { RegisterFormComponent, RegisterState } from "./RegisterFormTypes";
 import useFormInput from "../../hooks/useFormInput";
 import { useAppDispatch } from "../../hooks/useReduxActions";
-import { registerUser } from "../../store/reducers/userSlice";
+import { registerUser } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
 
 const RegisterForm: RegisterFormComponent = () => {

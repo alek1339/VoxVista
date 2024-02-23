@@ -9,6 +9,9 @@ interface UserState {
 interface UserData {
   username: string;
   password: string;
+}
+
+interface RegistrationData extends UserData {
   password2: string;
 }
 
@@ -17,7 +20,7 @@ const initialState: UserState = {
   error: null,
 };
 
-const userSlice = createSlice({
+const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
@@ -30,10 +33,10 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, setAuthError } = userSlice.actions;
+export const { setUser, setAuthError } = authSlice.actions;
 
 export const registerUser =
-  (userData: UserData) => async (dispatch: AppDispatch) => {
+  (userData: RegistrationData) => async (dispatch: AppDispatch) => {
     try {
       const response = await fetch("http://localhost:5000/users/register", {
         method: "POST",
@@ -58,4 +61,30 @@ export const registerUser =
     }
   };
 
-export default userSlice.reducer;
+export const loginUser =
+  (userData: UserData) => async (dispatch: AppDispatch) => {
+    console.log("userData", userData);
+    try {
+      const response = await fetch("http://localhost:5000/users/login", {
+        method: "POST",
+        body: JSON.stringify(userData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.msg && data.msg.length > 0) {
+        dispatch(setAuthError(data.msg));
+      } else {
+        dispatch(setAuthError(null));
+        dispatch(setUser(data.user));
+      }
+      return data;
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+
+export default authSlice.reducer;
