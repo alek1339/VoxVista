@@ -4,7 +4,7 @@ type UserData = {
 };
 
 export interface ProtectedRouteProps {
-  user: UserData | null;
+  // user: UserData | null;
   children: React.ReactNode;
   fromLoginOrRegister?: boolean;
   isAdminRoute?: boolean;

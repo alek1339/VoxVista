@@ -74,4 +74,32 @@ router.post("/login", (req, res) => {
   }
 });
 
+// @route  GET users/current
+// @desc Return current user
+// @access Private
+router.post("/current", async (req, res) => {
+  try {
+    const authHeader = req.header("Authorization");
+    const [bearer, token] = authHeader.split(" ");
+
+    if (!token) {
+      return res.status(401).json({ msg: "No token, authorization denied" });
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(token, "secret");
+    // Get the user from the decoded token
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Respond to the client with the user object
+    res.json(user);
+  } catch (error) {
+    res.status(500).send("Server error" + error.message);
+  }
+});
+
 module.exports = router;

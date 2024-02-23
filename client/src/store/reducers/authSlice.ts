@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
+import Cookies from "js-cookie";
 
 interface UserState {
   user: UserData | null;
@@ -9,6 +10,7 @@ interface UserState {
 interface UserData {
   username: string;
   password: string;
+  isAdmin?: boolean;
 }
 
 interface RegistrationData extends UserData {
@@ -74,17 +76,39 @@ export const loginUser =
       });
 
       const data = await response.json();
+      const { token } = data;
 
-      if (data.msg && data.msg.length > 0) {
-        dispatch(setAuthError(data.msg));
+      if (token) {
+        Cookies.set("authToken", token);
+        window.location.href = "/";
       } else {
-        dispatch(setAuthError(null));
-        dispatch(setUser(data.user));
+        dispatch(setAuthError(data.msg));
       }
+
       return data;
     } catch (error) {
       console.error("Login failed", error);
     }
   };
+
+// Token-based login action
+export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
+  console.log("token", token);
+  try {
+    // Make an API request to your backend to login the user
+    const response = await fetch("http://localhost:5000/users/current", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    });
+    const data = await response.json();
+    dispatch(setUser(data));
+  } catch (error) {
+    console.error("Login failed", error);
+    // TODO: Handle login failure (e.g., show an error message)
+  }
+};
 
 export default authSlice.reducer;
