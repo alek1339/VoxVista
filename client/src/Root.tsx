@@ -7,12 +7,10 @@ import { jwtDecode } from "jwt-decode";
 import "./Root.css";
 import "./styles/styles.scss";
 import Navigation from "./components/navigation/Navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "./store/store";
+import { logoutUser } from "./store/reducers/authSlice";
 
 function Root() {
   const dispatch = useAppDispatch();
-  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const token = Cookies.get("authToken");
@@ -23,13 +21,11 @@ function Root() {
       const currentTime = Date.now() / 1000;
 
       if (decodedToken && decodedToken.exp && decodedToken.exp < currentTime) {
-        // TODO: implement logoutUser action
-        // dispatch(logoutUser());
+        dispatch(logoutUser());
       }
       dispatch(tokenLogin(token));
     } else {
-      // TODO: implement logoutUser action
-      // dispatch(logoutUser());
+      dispatch(logoutUser());
     }
   }, [dispatch]);
 

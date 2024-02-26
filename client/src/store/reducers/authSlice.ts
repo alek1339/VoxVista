@@ -93,7 +93,6 @@ export const loginUser =
 
 // Token-based login action
 export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
-  console.log("token", token);
   try {
     // Make an API request to your backend to login the user
     const response = await fetch("http://localhost:5000/users/current", {
@@ -109,6 +108,12 @@ export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
     console.error("Login failed", error);
     // TODO: Handle login failure (e.g., show an error message)
   }
+};
+
+// Logout action
+export const logoutUser = () => async (dispatch: AppDispatch) => {
+  Cookies.remove("authToken");
+  dispatch(setUser(null));
 };
 
 export default authSlice.reducer;
