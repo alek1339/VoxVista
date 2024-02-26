@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import Cookies from "js-cookie";
 
-interface UserState {
+interface AuthState {
   user: UserData | null;
   error: string | null;
 }
@@ -17,7 +17,7 @@ interface RegistrationData extends UserData {
   password2: string;
 }
 
-const initialState: UserState = {
+const initialState: AuthState = {
   user: null,
   error: null,
 };
@@ -58,8 +58,8 @@ export const registerUser =
       }
       return data;
     } catch (error) {
-      // TODO: Handle registration failure (e.g., show an error message) and remove console.log
-      console.error("Registration failed", error);
+      dispatch(setAuthError("Registration failed. Please try again."));
+      console.log("Registration failed", error);
     }
   };
 
