@@ -50,9 +50,8 @@ router.post("/login", (req, res) => {
   try {
     User.findOne({ username: username }).then((user) => {
       // Check for user
-      console.log("user", req.body);
       if (!user) {
-        return res.status(404).json({ username: "User not found" });
+        return res.status(404).json({ msg: "User not found" });
       }
       // Check Password
       bcrypt.compare(password, user.password).then((isMatch) => {
@@ -67,7 +66,7 @@ router.post("/login", (req, res) => {
             });
           });
         } else {
-          return res.status(400).json({ password: "Password incorrect" });
+          return res.status(400).json({ msg: "Password incorrect" });
         }
       });
     });

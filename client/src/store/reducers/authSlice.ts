@@ -52,9 +52,10 @@ export const registerUser =
 
       if (data.msg && data.msg.length > 0) {
         dispatch(setAuthError(data.msg));
+        console.log("Registration failed", data.msg);
       } else {
         dispatch(setAuthError(null));
-        dispatch(setUser(data.user));
+        dispatch(setUser(data));
       }
       return data;
     } catch (error) {
@@ -65,7 +66,6 @@ export const registerUser =
 
 export const loginUser =
   (userData: UserData) => async (dispatch: AppDispatch) => {
-    console.log("userData", userData);
     try {
       const response = await fetch("http://localhost:5000/users/login", {
         method: "POST",
@@ -80,6 +80,7 @@ export const loginUser =
 
       if (token) {
         Cookies.set("authToken", token);
+        dispatch(setAuthError(null));
         window.location.href = "/";
       } else {
         dispatch(setAuthError(data.msg));
@@ -87,7 +88,8 @@ export const loginUser =
 
       return data;
     } catch (error) {
-      console.error("Login failed", error);
+      dispatch(setAuthError("Login failed. Please try again."));
+      console.log("Login failed", error);
     }
   };
 
@@ -103,10 +105,10 @@ export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
       },
     });
     const data = await response.json();
+    console.log("Token login data", data);
     dispatch(setUser(data));
   } catch (error) {
     console.error("Login failed", error);
-    // TODO: Handle login failure (e.g., show an error message)
   }
 };
 
