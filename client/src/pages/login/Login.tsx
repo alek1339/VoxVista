@@ -3,14 +3,24 @@ import { loginUser } from "../../store/reducers/authSlice";
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import useFormInput from "../../hooks/useFormInput";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { useEffect } from "react";
+import { setAuthError } from "../../store/reducers/authSlice";
 
 const Login: LoginComponent = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { error } = useSelector((state: RootState) => state.auth);
   const { formData, handleInputChange } = useFormInput({
     username: "",
     password: "",
   });
+
+  useEffect(() => {
+    dispatch(setAuthError(null));
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,6 +54,8 @@ const Login: LoginComponent = () => {
         />
         <button type="submit">Login</button>
       </form>
+      {error && <p className="error-text">{error}</p>}
+      <Link to="/forgot-password">Forgot Password?</Link>
     </div>
   );
 };

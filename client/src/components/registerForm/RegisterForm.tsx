@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RegisterFormComponent, RegisterState } from "./RegisterFormTypes";
 import { useSelector } from "react-redux";
 
@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../hooks/useReduxActions";
 import { registerUser } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
 import { RootState } from "../../store/reducers";
+import { setAuthError } from "../../store/reducers/authSlice";
 
 const RegisterForm: RegisterFormComponent = () => {
   const dispatch = useAppDispatch();
@@ -19,6 +20,10 @@ const RegisterForm: RegisterFormComponent = () => {
     confirmPassword: "",
   });
 
+  useEffect(() => {
+    dispatch(setAuthError(null));
+  }, []);
+
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState<
@@ -27,6 +32,7 @@ const RegisterForm: RegisterFormComponent = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(setAuthError(null));
     const userdata = {
       username: formData.username,
       password: formData.password,

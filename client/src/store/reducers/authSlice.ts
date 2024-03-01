@@ -2,9 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import Cookies from "js-cookie";
 
+import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
+
 interface AuthState {
   user: UserData | null;
   error: string | null;
+  passwordResetEmailSent: boolean;
 }
 
 interface UserData {
@@ -20,6 +23,7 @@ interface RegistrationData extends UserData {
 const initialState: AuthState = {
   user: null,
   error: null,
+  passwordResetEmailSent: false,
 };
 
 const authSlice = createSlice({
@@ -32,10 +36,22 @@ const authSlice = createSlice({
     setAuthError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+    sendPasswordResetEmailFailure: (state, action) => {
+      state.error = action.payload;
+    },
+    sendPasswordResetEmailSuccess: (state) => {
+      state.passwordResetEmailSent = true;
+      state.error = null;
+    },
   },
 });
 
-export const { setUser, setAuthError } = authSlice.actions;
+export const {
+  setUser,
+  setAuthError,
+  sendPasswordResetEmailFailure,
+  sendPasswordResetEmailSuccess,
+} = authSlice.actions;
 
 export const registerUser =
   (userData: RegistrationData) => async (dispatch: AppDispatch) => {
@@ -54,18 +70,16 @@ export const registerUser =
         dispatch(setAuthError(data.msg));
       } else {
         dispatch(setAuthError(null));
-        dispatch(setUser(data.user));
+        dispatch(setUser(data));
       }
       return data;
     } catch (error) {
       dispatch(setAuthError("Registration failed. Please try again."));
-      console.log("Registration failed", error);
     }
   };
 
 export const loginUser =
   (userData: UserData) => async (dispatch: AppDispatch) => {
-    console.log("userData", userData);
     try {
       const response = await fetch("http://localhost:5000/users/login", {
         method: "POST",
@@ -115,5 +129,19 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
   Cookies.remove("authToken");
   dispatch(setUser(null));
 };
+
+// Action for sending a password reset email
+export const sendPasswordResetEmail =
+  (email: string) => async (dispatch: AppDispatch) => {
+    try {
+      await sendPasswordResetEmailRequest(email)(dispatch);
+    } catch (error) {
+      dispatch(
+        sendPasswordResetEmailFailure(
+          "An error occurred while resetting the password."
+        )
+      );
+    }
+  };
 
 export default authSlice.reducer;
