@@ -4,19 +4,18 @@ import {
   sendPasswordResetEmailFailure,
 } from "../store/reducers/authSlice";
 
+import { API_BASE_URL } from "./api";
+
 export const sendPasswordResetEmailRequest =
   (email: string) => async (dispatch: AppDispatch) => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/users/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/users/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
       const data = await response.json();
       if (response.ok) {
         if (data.msg && data.msg.length > 0) {

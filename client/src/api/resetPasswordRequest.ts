@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-
-const API_BASE_URL = "http://localhost:5000"; // Update with your API URL
+import { API_BASE_URL } from "./api";
 
 interface ResetPasswordResponse {
   success: boolean;
