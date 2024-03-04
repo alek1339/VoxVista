@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "../../api/api";
@@ -40,8 +40,9 @@ export const {
   sendPasswordResetEmailSuccess,
 } = authSlice.actions;
 
-export const registerUser =
-  (userData: RegistrationData) => async (dispatch: AppDispatch) => {
+export const registerUser = createAsyncThunk(
+  "users/registerUser",
+  async (userData: RegistrationData, { dispatch }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/register`, {
         method: "POST",
@@ -60,14 +61,18 @@ export const registerUser =
         dispatch(setAuthError(null));
         dispatch(setUser(data));
       }
+
       return data;
     } catch (error) {
       dispatch(setAuthError("Registration failed. Please try again."));
+      throw error;
     }
-  };
+  }
+);
 
-export const loginUser =
-  (userData: UserData) => async (dispatch: AppDispatch) => {
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (userData: UserData, { dispatch }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
@@ -91,27 +96,36 @@ export const loginUser =
       return data;
     } catch (error) {
       dispatch(setAuthError("Login failed. Please try again."));
-      console.log("Login failed", error);
+      throw error; // Rethrow the error to mark the async thunk as failed
     }
-  };
+  }
+);
 
 // Token-based login action
-export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/users/current`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    });
-    const data = await response.json();
-    console.log("Token login data", data);
-    dispatch(setUser(data));
-  } catch (error) {
-    console.error("Login failed", error);
+// Async thunk for token login
+export const tokenLogin = createAsyncThunk(
+  "user/tokenLogin",
+  async (token: string, { dispatch }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/current`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      dispatch(setUser(data));
+
+      return data;
+    } catch (error) {
+      dispatch(setAuthError("Token login failed. Please try again."));
+      throw error;
+    }
   }
-};
+);
 
 // Logout action
 export const logoutUser = () => async (dispatch: AppDispatch) => {
@@ -120,17 +134,21 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
 };
 
 // Action for sending a password reset email
-export const sendPasswordResetEmail =
-  (email: string) => async (dispatch: AppDispatch) => {
+export const sendPasswordResetEmail = createAsyncThunk(
+  "user/sendPasswordResetEmail",
+  async (email: string, { dispatch }) => {
     try {
       await sendPasswordResetEmailRequest(email)(dispatch);
+      dispatch(sendPasswordResetEmailSuccess());
     } catch (error) {
       dispatch(
         sendPasswordResetEmailFailure(
           "An error occurred while resetting the password."
         )
       );
+      throw error;
     }
-  };
+  }
+);
 
 export default authSlice.reducer;
