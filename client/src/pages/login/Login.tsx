@@ -22,10 +22,6 @@ const Login: LoginComponent = () => {
     dispatch(setAuthError(null));
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(setAuthError(null));
-  }, []);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const userdata = {
@@ -33,11 +29,7 @@ const Login: LoginComponent = () => {
       password: formData.password,
     };
 
-    dispatch(loginUser(userdata)).then((data) => {
-      if (data.success) {
-        navigate("/");
-      }
-    });
+    dispatch(loginUser(userdata));
   };
 
   return (

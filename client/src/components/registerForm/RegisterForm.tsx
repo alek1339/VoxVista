@@ -17,10 +17,6 @@ const RegisterForm: RegisterFormComponent = () => {
     confirmPassword: "",
   });
 
-  useEffect(() => {
-    dispatch(setAuthError(null));
-  }, []);
-
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState<
