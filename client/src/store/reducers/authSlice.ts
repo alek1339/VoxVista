@@ -55,6 +55,7 @@ export const registerUser =
 
       if (data.msg && data.msg.length > 0) {
         dispatch(setAuthError(data.msg));
+        console.log("Registration failed", data.msg);
       } else {
         dispatch(setAuthError(null));
         dispatch(setUser(data));
@@ -81,6 +82,7 @@ export const loginUser =
 
       if (token) {
         Cookies.set("authToken", token);
+        dispatch(setAuthError(null));
         window.location.href = "/";
       } else {
         dispatch(setAuthError(data.msg));
@@ -88,7 +90,8 @@ export const loginUser =
 
       return data;
     } catch (error) {
-      console.error("Login failed", error);
+      dispatch(setAuthError("Login failed. Please try again."));
+      console.log("Login failed", error);
     }
   };
 
@@ -103,6 +106,7 @@ export const tokenLogin = (token: string) => async (dispatch: AppDispatch) => {
       },
     });
     const data = await response.json();
+    console.log("Token login data", data);
     dispatch(setUser(data));
   } catch (error) {
     console.error("Login failed", error);

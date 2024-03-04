@@ -12,11 +12,15 @@ import { setAuthError } from "../../store/reducers/authSlice";
 const Login: LoginComponent = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { error } = useSelector((state: RootState) => state.auth);
   const { formData, handleInputChange } = useFormInput({
     username: "",
     password: "",
   });
+  const { error } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    dispatch(setAuthError(null));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setAuthError(null));

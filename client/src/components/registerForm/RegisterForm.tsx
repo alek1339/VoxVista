@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { RegisterFormComponent, RegisterState } from "./RegisterFormTypes";
-import { useSelector } from "react-redux";
-
 import useFormInput from "../../hooks/useFormInput";
 import { useAppDispatch } from "../../hooks/useReduxActions";
-import { registerUser } from "../../store/reducers/authSlice";
+import { registerUser, setAuthError } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
-import { RootState } from "../../store/reducers";
-import { setAuthError } from "../../store/reducers/authSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 const RegisterForm: RegisterFormComponent = () => {
   const dispatch = useAppDispatch();
-  const { error: registrationError } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { error } = useSelector((state: RootState) => state.auth);
+
   const { formData, handleInputChange } = useFormInput<RegisterState>({
     username: "",
     password: "",
@@ -29,6 +26,10 @@ const RegisterForm: RegisterFormComponent = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState<
     string | null
   >(null);
+
+  useEffect(() => {
+    dispatch(setAuthError(null));
+  }, [dispatch]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,9 +47,7 @@ const RegisterForm: RegisterFormComponent = () => {
     }
 
     if (!isValidPassword(userdata.password)) {
-      setPasswordError(
-        "Add at least one uppercase letter, one lowercase letter, and one digit in your password. Minimum length is 8 characters."
-      );
+      setPasswordError("Invalid password");
     } else {
       setPasswordError(null);
     }
@@ -59,17 +58,13 @@ const RegisterForm: RegisterFormComponent = () => {
       setConfirmPasswordError(null);
     }
 
-    if (usernameError || passwordError || confirmPasswordError) {
-      return;
-    } else {
-      dispatch(
-        registerUser({
-          username: userdata.username,
-          password: userdata.password,
-          password2: userdata.confirmPassword,
-        })
-      );
-    }
+    dispatch(
+      registerUser({
+        username: userdata.username,
+        password: userdata.password,
+        password2: userdata.confirmPassword,
+      })
+    );
   };
 
   return (
@@ -98,7 +93,7 @@ const RegisterForm: RegisterFormComponent = () => {
         <p className="error-text">{confirmPasswordError}</p>
       )}
       <button type="submit">Register</button>
-      {registrationError && <p className="error-text">{registrationError}</p>}
+      {error && <p className="error-text">{error}</p>}
     </form>
   );
 };
