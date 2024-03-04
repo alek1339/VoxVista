@@ -11,8 +11,10 @@ import Register from "./pages/register/Register.tsx";
 import Home from "./pages/home/Home.tsx";
 import Admin from "./admin/Admin.tsx";
 import NotFound from "./pages/notFound/NotFound.tsx";
+import ForgottenPassword from "./pages/forgottenPassword/ForgottenPassword.tsx";
 
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
+import PasswordReset from "./pages/passwordReset/PasswordReset.tsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute fromLoginOrRegister={true}>
             <Login />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/forgot-password",
+        element: (
+          <ProtectedRoute fromLoginOrRegister={true}>
+            <ForgottenPassword />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/reset-password/:token",
+        element: (
+          <ProtectedRoute fromLoginOrRegister={true}>
+            <PasswordReset />
           </ProtectedRoute>
         ),
       },

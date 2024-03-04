@@ -3,6 +3,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const sendPasswordResetEmail = require("../controllers/emailController");
+const generateUniqueToken = require("../controllers/generateUniqueToken");
+
 // Load User model
 const User = require("../models/User");
 
@@ -100,6 +103,77 @@ router.post("/current", async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).send("Server error" + error.message);
+  }
+});
+
+// Route for initiating a password reset
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Generate a unique token (e.g., using a library like 'crypto' or 'uuid')
+    const token = await generateUniqueToken();
+    console.log("Generated Token:", token);
+    // Find the user by their email and update the password reset token and its expiration
+    const user = await User.findOneAndUpdate(
+      { email },
+      {
+        passwordResetToken: token,
+        passwordResetExpires: Date.now() + 3600000, // Token expires in 1 hour (adjust as needed)
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      // Handle the case where the email doesn't match any user
+      return res.json({ msg: "No user found with that email address" });
+    }
+
+    // Send a password reset email to the user's email address with a link containing the token
+    sendPasswordResetEmail(email, token);
+
+    // Respond to the client with a success message
+    res.json({ msg: "Password reset email sent successfully" });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Route for resetting a password
+
+router.post("/reset-password/:token", async (req, res) => {
+  try {
+    const { password } = req.body;
+    const { token } = req.params;
+    // Find the user by the password reset token
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      // Handle the case where the token doesn't match any user
+      return res.status(404).json({ message: "Invalid token" });
+    }
+
+    // Hash the new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Update the user's password and password reset token
+    user.password = hashedPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    // Save the updated user object
+    user.save();
+
+    // Respond to the client with a success message
+    res.json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(500).send("Server Error");
   }
 });
 
