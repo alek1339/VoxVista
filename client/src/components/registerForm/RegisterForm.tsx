@@ -4,12 +4,11 @@ import useFormInput from "../../hooks/useFormInput";
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import { registerUser, setAuthError } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../hooks/useReduxActions";
 
 const RegisterForm: RegisterFormComponent = () => {
   const dispatch = useAppDispatch();
-  const { error } = useSelector((state: RootState) => state.auth);
+  const { error } = useAppSelector((state) => state.auth);
 
   const { formData, handleInputChange } = useFormInput<RegisterState>({
     username: "",

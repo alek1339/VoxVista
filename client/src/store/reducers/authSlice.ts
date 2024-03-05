@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { AppDispatch } from "../store";
+import { AppDispatch } from "../types/AuthTypes";
 import Cookies from "js-cookie";
-import { API_BASE_URL } from "../../api/api";
 
 import { AuthState, RegistrationData, UserData } from "../types/AuthTypes";
+
+import {
+  registerUserApi,
+  loginUserApi,
+  tokenLoginApi,
+} from "../../api/authService";
 
 import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
 
@@ -44,19 +49,10 @@ export const registerUser = createAsyncThunk(
   "users/registerUser",
   async (userData: RegistrationData, { dispatch }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/register`, {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
+      const data = await registerUserApi(userData);
 
       if (data.msg && data.msg.length > 0) {
         dispatch(setAuthError(data.msg));
-        console.log("Registration failed", data.msg);
       } else {
         dispatch(setAuthError(null));
         dispatch(setUser(data));
@@ -74,15 +70,7 @@ export const loginUser = createAsyncThunk(
   "user/login",
   async (userData: UserData, { dispatch }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/login`, {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
+      const data = await loginUserApi(userData);
       const { token } = data;
 
       if (token) {
@@ -96,26 +84,17 @@ export const loginUser = createAsyncThunk(
       return data;
     } catch (error) {
       dispatch(setAuthError("Login failed. Please try again."));
-      throw error; // Rethrow the error to mark the async thunk as failed
+      throw error;
     }
   }
 );
 
 // Token-based login action
-// Async thunk for token login
 export const tokenLogin = createAsyncThunk(
   "user/tokenLogin",
   async (token: string, { dispatch }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/current`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      });
-
-      const data = await response.json();
+      const data = await tokenLoginApi(token);
 
       dispatch(setUser(data));
 

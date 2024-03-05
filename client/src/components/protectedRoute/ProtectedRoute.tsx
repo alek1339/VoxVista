@@ -1,14 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { ProtectedRouteComponent } from "./ProtectedRouteTypes";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../hooks/useReduxActions";
 
 const ProtectedRoute: ProtectedRouteComponent = ({
   children,
   fromLoginOrRegister,
   isAdminRoute,
 }) => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   //   If someone who is not logged try to login and register should be allowed to do so
   if (fromLoginOrRegister && user === null) {
     return children;
