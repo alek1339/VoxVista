@@ -2,21 +2,18 @@ import { LoginComponent } from "./LoginTypes";
 import { loginUser } from "../../store/reducers/authSlice";
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import useFormInput from "../../hooks/useFormInput";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../hooks/useReduxActions";
 import { useEffect } from "react";
 import { setAuthError } from "../../store/reducers/authSlice";
 
 const Login: LoginComponent = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { formData, handleInputChange } = useFormInput({
     username: "",
     password: "",
   });
-  const { error } = useSelector((state: RootState) => state.auth);
+  const { error } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(setAuthError(null));

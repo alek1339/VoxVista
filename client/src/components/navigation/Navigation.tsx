@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import { logoutUser } from "../../store/reducers/authSlice";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../hooks/useReduxActions";
 
 const Navigation: NavigationComponent = () => {
   const dispatch = useAppDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logoutUser()).then(() => {

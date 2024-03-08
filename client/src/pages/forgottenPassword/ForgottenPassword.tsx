@@ -2,15 +2,14 @@ import { ForgottenPasswordComponent } from "./ForgottenPasswordTypes";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/useReduxActions";
 import { sendPasswordResetEmail } from "../../store/reducers/authSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/reducers";
+import { useAppSelector } from "../../hooks/useReduxActions";
 
 const ForgottenPassword: ForgottenPasswordComponent = () => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const { error, passwordResetEmailSent } = useSelector(
-    (state: RootState) => state.auth
+  const { error, passwordResetEmailSent } = useAppSelector(
+    (state) => state.auth
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -1,4 +1,4 @@
-import { AppDispatch } from "../store/store"; // Assuming AppDispatch is exported from your Redux store
+import { AppDispatch } from "../store/types/AuthTypes";
 import {
   sendPasswordResetEmailSuccess,
   sendPasswordResetEmailFailure,
