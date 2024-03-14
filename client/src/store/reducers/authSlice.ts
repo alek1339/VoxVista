@@ -16,6 +16,8 @@ const initialState: AuthState = {
   user: null,
   error: null,
   passwordResetEmailSent: false,
+  registerSuccess: false,
+  loginSuccess: false,
 };
 
 const authSlice = createSlice({
@@ -35,6 +37,18 @@ const authSlice = createSlice({
       state.passwordResetEmailSent = true;
       state.error = null;
     },
+    setRegisterSuccess: (state, action: PayloadAction<boolean>) => {
+      state.registerSuccess = action.payload;
+    },
+    clearRegisterSuccess: (state) => {
+      state.registerSuccess = false;
+    },
+    setLoginSuccess: (state, action: PayloadAction<boolean>) => {
+      state.loginSuccess = action.payload;
+    },
+    clearLoginSuccess: (state) => {
+      state.loginSuccess = false;
+    },
   },
 });
 
@@ -43,6 +57,10 @@ export const {
   setAuthError,
   sendPasswordResetEmailFailure,
   sendPasswordResetEmailSuccess,
+  setRegisterSuccess,
+  clearRegisterSuccess,
+  setLoginSuccess,
+  clearLoginSuccess,
 } = authSlice.actions;
 
 export const registerUser = createAsyncThunk(
@@ -55,6 +73,7 @@ export const registerUser = createAsyncThunk(
         dispatch(setAuthError(data.msg));
       } else {
         dispatch(setAuthError(null));
+        dispatch(setRegisterSuccess(true));
         dispatch(setUser(data));
       }
 
@@ -76,7 +95,8 @@ export const loginUser = createAsyncThunk(
       if (token) {
         Cookies.set("authToken", token);
         dispatch(setAuthError(null));
-        window.location.href = "/";
+        dispatch(setLoginSuccess(true));
+        dispatch(tokenLogin(token));
       } else {
         dispatch(setAuthError(data.msg));
       }
