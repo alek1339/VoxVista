@@ -4,6 +4,8 @@ export interface AuthState {
   user: UserData | null;
   error: string | null;
   passwordResetEmailSent: boolean;
+  registerSuccess: boolean;
+  loginSuccess: boolean;
 }
 
 export interface UserData {

@@ -25,7 +25,6 @@ export const sendPasswordResetEmailRequest =
         }
       }
     } catch (error) {
-      console.error("Error sending email:", error);
       dispatch(
         sendPasswordResetEmailFailure(
           "An error occurred while resetting the password."
