@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { AppDispatch } from "../types/AuthTypes";
+import { AppDispatch } from "../../types/AuthTypes";
 import Cookies from "js-cookie";
 
-import { AuthState, RegistrationData, UserData } from "../types/AuthTypes";
+import { AuthState, RegistrationData, LoginData } from "../../types/AuthTypes";
 
 import {
   registerUserApi,
@@ -11,6 +11,8 @@ import {
 } from "../../api/authService";
 
 import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
+
+import { User } from "../../types/User";
 
 const initialState: AuthState = {
   user: null,
@@ -24,7 +26,7 @@ const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserData | null>) => {
+    setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
     },
     setAuthError: (state, action: PayloadAction<string | null>) => {
@@ -87,7 +89,7 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (userData: UserData, { dispatch }) => {
+  async (userData: LoginData, { dispatch }) => {
     try {
       const data = await loginUserApi(userData);
       const { token } = data;
@@ -115,9 +117,7 @@ export const tokenLogin = createAsyncThunk(
   async (token: string, { dispatch }) => {
     try {
       const data = await tokenLoginApi(token);
-
       dispatch(setUser(data));
-
       return data;
     } catch (error) {
       dispatch(setAuthError("Token login failed. Please try again."));

@@ -9,15 +9,19 @@ import "./styles/styles.scss";
 import Navigation from "./components/navigation/Navigation";
 import { logoutUser } from "./store/reducers/authSlice";
 
+import "@fortawesome/fontawesome-free/css/all.css";
+import LanguageManager from "./components/languageManager/LanguageManager";
+import { useAppSelector } from "./hooks/useReduxActions";
+
 function Root() {
   const dispatch = useAppDispatch();
+
+  const { user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     const token = Cookies.get("authToken");
     if (token) {
       const decodedToken = jwtDecode(token);
-      console.log(decodedToken);
-
       const currentTime = Date.now() / 1000;
 
       if (decodedToken && decodedToken.exp && decodedToken.exp < currentTime) {
@@ -33,6 +37,7 @@ function Root() {
     <>
       <Navigation />
       <div id="detail">
+        <LanguageManager user={user} />
         <Outlet />
       </div>
     </>

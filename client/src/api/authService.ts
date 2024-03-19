@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "./api";
-import { RegistrationData, UserData } from "../store/types/AuthTypes";
+import { RegistrationData, UserData } from "../types/AuthTypes";
 
 export const registerUserApi = async (userData: RegistrationData) => {
   const response = await fetch(`${API_BASE_URL}/users/register`, {

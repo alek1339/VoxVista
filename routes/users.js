@@ -99,8 +99,24 @@ router.post("/current", async (req, res) => {
       return res.status(404).json({ msg: "User not found" });
     }
 
+    // Create a sanitized user object without the password field
+    const sanitizedUser = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dailyStreak: user.dailyStreak,
+      primaryLanguage: user.primaryLanguage,
+      learningLanguage: user.learningLanguage,
+      learnedLessons: user.learnedLessons,
+      forReview: user.forReview,
+      isProUser: user.isProUser,
+      isAdmin: user.isAdmin,
+    };
+
     // Respond to the client with the user object
-    res.json(user);
+    res.json(sanitizedUser);
   } catch (error) {
     res.status(500).send("Server error" + error.message);
   }

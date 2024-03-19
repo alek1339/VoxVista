@@ -4,5 +4,6 @@
   "password": "password",
   "forgotPassword": "Forgot password?",
   "userNotFound": "User not found",
-  "incorrectPassword": "Incorrect password"
+  "incorrectPassword": "Incorrect password",
+  "account": "account"
 }
