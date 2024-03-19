@@ -1,0 +1,8 @@
+{
+  "loginPageTitle": "Login",
+  "username": "username",
+  "password": "password",
+  "forgotPassword": "Forgot password?",
+  "userNotFound": "User not found",
+  "incorrectPassword": "Incorrect password"
+}
