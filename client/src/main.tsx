@@ -16,6 +16,26 @@ import ForgottenPassword from "./pages/forgottenPassword/ForgottenPassword.tsx";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
 import PasswordReset from "./pages/passwordReset/PasswordReset.tsx";
 
+import { I18nextProvider } from "react-i18next";
+import i18next from "i18next";
+import translation_en from "../public/locales/en/translation.json";
+import translation_bg from "../public/locales/bg/translation.json";
+
+i18next.init({
+  interpolation: {
+    escapeValue: false,
+  },
+  lng: "bg",
+  resources: {
+    en: {
+      translation: translation_en,
+    },
+    bg: {
+      translation: translation_bg,
+    },
+  },
+});
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -80,7 +100,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <I18nextProvider i18n={i18next}>
+        <RouterProvider router={router} />
+      </I18nextProvider>
     </React.StrictMode>
   </Provider>
 );

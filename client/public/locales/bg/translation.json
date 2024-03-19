@@ -1,0 +1,8 @@
+{
+  "loginPageTitle": "Вход",
+  "username": "Потребителско име",
+  "password": "Парола",
+  "forgotPassword": "Забравена парола?",
+  "userNotFound": "Потребителят не е намерен",
+  "incorrectPassword": "Грешна парола"
+}
