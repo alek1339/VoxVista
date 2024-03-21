@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "./api";
-import { RegistrationData, UserData } from "../store/types/AuthTypes";
+import { RegistrationData, LoginData } from "../types/AuthTypes";
+import { User } from "../types/User";
 
 export const registerUserApi = async (userData: RegistrationData) => {
   const response = await fetch(`${API_BASE_URL}/users/register`, {
@@ -14,7 +15,7 @@ export const registerUserApi = async (userData: RegistrationData) => {
   return data;
 };
 
-export const loginUserApi = async (userData: UserData) => {
+export const loginUserApi = async (userData: LoginData) => {
   const response = await fetch(`${API_BASE_URL}/users/login`, {
     method: "POST",
     body: JSON.stringify(userData),
@@ -38,4 +39,16 @@ export const tokenLoginApi = async (token: string) => {
 
   const data = await response.json();
   return data;
+};
+
+export const updateUserApi = async (userData: User) => {
+  const response = await fetch(`${API_BASE_URL}/users/update`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+
+  return response;
 };

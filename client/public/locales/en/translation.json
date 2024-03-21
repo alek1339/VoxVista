@@ -4,5 +4,11 @@
   "password": "password",
   "forgotPassword": "Forgot password?",
   "userNotFound": "User not found",
-  "incorrectPassword": "Incorrect password"
+  "incorrectPassword": "Incorrect password",
+  "account": "account",
+  "email": "Email",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "primaryLanguage": "Primary language",
+  "learningLanguage": "Learning language"
 }

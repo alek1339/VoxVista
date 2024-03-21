@@ -1,4 +1,4 @@
-import { AppDispatch } from "../store/types/AuthTypes";
+import { AppDispatch } from "../types/AuthTypes";
 import {
   sendPasswordResetEmailSuccess,
   sendPasswordResetEmailFailure,

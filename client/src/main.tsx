@@ -20,17 +20,18 @@ import { I18nextProvider } from "react-i18next";
 import i18next from "i18next";
 import translation_en from "../public/locales/en/translation.json";
 import translation_bg from "../public/locales/bg/translation.json";
+import ProfileSettings from "./pages/profileSettings/ProfileSettings.tsx";
 
 i18next.init({
   interpolation: {
     escapeValue: false,
   },
-  lng: "bg",
+  lng: "English",
   resources: {
-    en: {
+    English: {
       translation: translation_en,
     },
-    bg: {
+    Bulgarian: {
       translation: translation_bg,
     },
   },
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
             <Admin />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/profile-settings",
+        element: <ProfileSettings />,
       },
       {
         path: "*",

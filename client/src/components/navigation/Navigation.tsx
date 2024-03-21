@@ -21,6 +21,11 @@ const Navigation: NavigationComponent = () => {
         <Link to="/">Home</Link>
       </li>
       <li>
+        <Link to="/profile-settings">
+          <i className="fas fa-user-cog"></i> Profile Settings
+        </Link>
+      </li>
+      <li>
         <button onClick={handleLogout}>Logout</button>
       </li>
     </>
