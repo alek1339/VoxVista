@@ -1,14 +1,15 @@
+import { LearningLanguage } from "../enums/LearningLanguage";
+import { PrimaryLanguage } from "../enums/PrimaryLanguage";
+
 export interface User {
-  _id: string;
+  id: string;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
   dailyStreak: number;
-  primaryLanguage: string;
-  learningLanguage: string;
-  learnedLessons: string[];
-  forReview: string[];
+  primaryLanguage: PrimaryLanguage;
+  learningLanguage: LearningLanguage;
   isProUser: boolean;
   isAdmin: boolean;
   passwordResetToken: string;

@@ -26,12 +26,12 @@ i18next.init({
   interpolation: {
     escapeValue: false,
   },
-  lng: "english",
+  lng: "English",
   resources: {
-    english: {
+    English: {
       translation: translation_en,
     },
-    bulgarian: {
+    Bulgarian: {
       translation: translation_bg,
     },
   },

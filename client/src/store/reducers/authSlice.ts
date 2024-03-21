@@ -8,6 +8,7 @@ import {
   registerUserApi,
   loginUserApi,
   tokenLoginApi,
+  updateUserApi,
 } from "../../api/authService";
 
 import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
@@ -66,7 +67,7 @@ export const {
 } = authSlice.actions;
 
 export const registerUser = createAsyncThunk(
-  "users/registerUser",
+  "user/registerUser",
   async (userData: RegistrationData, { dispatch }) => {
     try {
       const data = await registerUserApi(userData);
@@ -145,6 +146,28 @@ export const sendPasswordResetEmail = createAsyncThunk(
           "An error occurred while resetting the password."
         )
       );
+      throw error;
+    }
+  }
+);
+
+// Action for updating the user's information
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (userData: User, { dispatch }) => {
+    try {
+      console.log(userData);
+      const data = await updateUserApi(userData);
+
+      if (data.ok) {
+        dispatch(setUser(userData));
+      } else {
+        dispatch(setAuthError("An error occurred while updating the user."));
+      }
+
+      return data;
+    } catch (error) {
+      dispatch(setAuthError("An error occurred while updating the user."));
       throw error;
     }
   }

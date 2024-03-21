@@ -36,14 +36,6 @@ const UserSchema = new Schema({
     type: String,
     default: Languages.GERMAN,
   },
-  learnedLessons: {
-    type: Array,
-    default: [],
-  },
-  forReview: {
-    type: Array,
-    default: [],
-  },
   isProUser: {
     type: Boolean,
     default: false,

@@ -109,8 +109,6 @@ router.post("/current", async (req, res) => {
       dailyStreak: user.dailyStreak,
       primaryLanguage: user.primaryLanguage,
       learningLanguage: user.learningLanguage,
-      learnedLessons: user.learnedLessons,
-      forReview: user.forReview,
       isProUser: user.isProUser,
       isAdmin: user.isAdmin,
     };
@@ -190,6 +188,35 @@ router.post("/reset-password/:token", async (req, res) => {
   } catch (error) {
     console.error("Error", error);
     res.status(500).send("Server Error");
+  }
+});
+
+// Update user
+router.put("/update", async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Update the user object with the new data
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.primaryLanguage = req.body.primaryLanguage;
+    user.learningLanguage = req.body.learningLanguage;
+    user.isProUser = req.body.isProUser;
+    user.isAdmin = req.body.isAdmin;
+
+    // Save the updated user object
+    user.save();
+
+    // Respond to the client with the updated user object
+    res.json(user);
+  } catch (error) {
+    res.status(500).send("Server error" + error.message);
   }
 });
 

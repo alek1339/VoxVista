@@ -1,5 +1,5 @@
 module.exports = {
-  ENGLISH: "english",
-  GERMAN: "german",
-  BULGARIAN: "bulgarian",
+  ENGLISH: "English",
+  GERMAN: "German",
+  BULGARIAN: "Bulgarian",
 };

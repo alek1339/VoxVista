@@ -5,5 +5,10 @@
   "forgotPassword": "Забравена парола?",
   "userNotFound": "Потребителят не е намерен",
   "incorrectPassword": "Грешна парола",
-  "account": "Акаунт"
+  "account": "Акаунт",
+  "email": "Имейл",
+  "firstName": "Име",
+  "lastName": "Фамилия",
+  "primaryLanguage": "Основен език",
+  "learningLanguage": "Език за учене"
 }
