@@ -52,3 +52,20 @@ export const updateUserApi = async (userData: User) => {
 
   return response;
 };
+
+export const changePasswordApi = async (
+  oldPassword: string,
+  newPassword: string,
+  id: string
+) => {
+  const response = await fetch(`${API_BASE_URL}/users/change-password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ oldPassword, newPassword, id }),
+  });
+
+  const data = await response.json();
+  return data;
+};

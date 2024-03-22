@@ -5,6 +5,7 @@ import { useAppDispatch } from "../../hooks/useReduxActions";
 import { registerUser, setAuthError } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
 import { useAppSelector } from "../../hooks/useReduxActions";
+import PasswordField from "../passwordField/PasswordField";
 
 const RegisterForm: RegisterFormComponent = () => {
   const dispatch = useAppDispatch();
@@ -71,22 +72,20 @@ const RegisterForm: RegisterFormComponent = () => {
         placeholder="Username"
       />
       {usernameError && <p className="error-text">{usernameError}</p>}
-      <input
-        type="password"
+      <PasswordField
         name="password"
-        onChange={(e) => handleInputChange(e)}
+        value={formData.password}
+        onChange={handleInputChange}
         placeholder="Password"
+        error={passwordError}
       />
-      {passwordError && <p className="error-text">{passwordError}</p>}
-      <input
-        type="password"
+      <PasswordField
         name="confirmPassword"
-        onChange={(e) => handleInputChange(e)}
-        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={handleInputChange}
+        placeholder="Confirm password"
+        error={confirmPasswordError}
       />
-      {confirmPasswordError && (
-        <p className="error-text">{confirmPasswordError}</p>
-      )}
       <button type="submit">Register</button>
       {error && <p className="error-text">{error}</p>}
     </form>

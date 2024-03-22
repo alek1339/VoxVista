@@ -21,6 +21,7 @@ import i18next from "i18next";
 import translation_en from "../public/locales/en/translation.json";
 import translation_bg from "../public/locales/bg/translation.json";
 import ProfileSettings from "./pages/profileSettings/ProfileSettings.tsx";
+import ChangePassword from "./pages/changePassword/ChangePassword.tsx";
 
 i18next.init({
   interpolation: {
@@ -79,6 +80,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute fromLoginOrRegister={true}>
             <PasswordReset />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/change-password",
+        element: (
+          <ProtectedRoute>
+            <ChangePassword />
           </ProtectedRoute>
         ),
       },

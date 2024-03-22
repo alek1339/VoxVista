@@ -1,8 +1,13 @@
 import { ButtonType } from "./ButtonTypes";
 
-const Button: ButtonType = ({ text, onClick, className, disabled }) => {
+const Button: ButtonType = ({ text, onClick, className, disabled, type }) => {
   return (
-    <button onClick={onClick} className={className} disabled={disabled}>
+    <button
+      onClick={onClick}
+      className={className}
+      disabled={disabled}
+      type={type}
+    >
       {text}
     </button>
   );

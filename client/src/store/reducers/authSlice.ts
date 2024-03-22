@@ -9,6 +9,7 @@ import {
   loginUserApi,
   tokenLoginApi,
   updateUserApi,
+  changePasswordApi,
 } from "../../api/authService";
 
 import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
@@ -156,7 +157,6 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (userData: User, { dispatch }) => {
     try {
-      console.log(userData);
       const data = await updateUserApi(userData);
 
       if (data.ok) {
@@ -168,6 +168,34 @@ export const updateUser = createAsyncThunk(
       return data;
     } catch (error) {
       dispatch(setAuthError("An error occurred while updating the user."));
+      throw error;
+    }
+  }
+);
+
+// Action for chenging the user's password
+export const changePassword = createAsyncThunk(
+  "user/changePassword",
+  async (
+    requestData: { oldPassword: string; newPassword: string; id: string },
+    { dispatch }
+  ) => {
+    try {
+      const data = await changePasswordApi(
+        requestData.oldPassword,
+        requestData.newPassword,
+        requestData.id
+      );
+      if (data.msg && data.msg.length > 0) {
+        dispatch(setAuthError(data.msg));
+      }
+      if (data.ok) {
+        dispatch(setAuthError(null));
+      }
+
+      return data;
+    } catch (error) {
+      dispatch(setAuthError("An error occurred while changing the password."));
       throw error;
     }
   }

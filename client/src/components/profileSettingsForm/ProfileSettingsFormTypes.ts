@@ -1,3 +1,5 @@
+import { LearningLanguage } from "../../enums/LearningLanguage";
+import { PrimaryLanguage } from "../../enums/PrimaryLanguage";
 import { User } from "../../types/User";
 
 export interface ProfileSettingsFormProps {
@@ -9,8 +11,8 @@ export interface ProfileSettingsState {
   email: string;
   firstName: string;
   lastName: string;
-  primaryLanguage: string;
-  learningLanguage: string;
+  primaryLanguage: PrimaryLanguage;
+  learningLanguage: LearningLanguage;
 }
 
 export type ProfileSettingsComponent = React.FC<ProfileSettingsFormProps>;

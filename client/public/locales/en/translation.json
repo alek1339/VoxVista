@@ -5,10 +5,20 @@
   "forgotPassword": "Forgot password?",
   "userNotFound": "User not found",
   "incorrectPassword": "Incorrect password",
+  "invalidEmail": "Invalid email",
+  "invalidUsername": "Invalid username",
   "account": "account",
+  "save": "Save",
   "email": "Email",
   "firstName": "First name",
   "lastName": "Last name",
   "primaryLanguage": "Primary language",
-  "learningLanguage": "Learning language"
+  "learningLanguage": "Learning language",
+  "changePassword": "Change password",
+  "oldPassword": "Old password",
+  "newPassword": "New password",
+  "confirmPassword": "Confirm password",
+  "passwordRequirements": "Password require at least one uppercase letter, one lowercase letter, and one digit",
+  "passwordMismatch": "Passwords do not match",
+  "oldPasswordRequired": "Old password is required"
 }
