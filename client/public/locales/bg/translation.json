@@ -5,10 +5,21 @@
   "forgotPassword": "Забравена парола?",
   "userNotFound": "Потребителят не е намерен",
   "incorrectPassword": "Грешна парола",
+  "invalidEmail": "Невалиден имейл",
+  "invalidUsername": "Невалидно потребителско име",
   "account": "Акаунт",
   "email": "Имейл",
+  "save": "Запази",
   "firstName": "Име",
   "lastName": "Фамилия",
   "primaryLanguage": "Основен език",
-  "learningLanguage": "Език за учене"
+  "learningLanguage": "Език за учене",
+  "changePassword": "Промени паролата",
+  "oldPassword": "Стара парола",
+  "newPassword": "Нова парола",
+  "confirmPassword": "Потвърди паролата",
+  "passwordRequirements": "Паролата изисква поне една главна буква, една малка буква и една цифра",
+  "passwordMismatch": "Паролите не съвпадат",
+  "oldPasswordRequired": "Старата парола е задължителна",
+  "deleteAccount": "Изтрий акаунта"
 }
