@@ -20,5 +20,6 @@
   "confirmPassword": "Потвърди паролата",
   "passwordRequirements": "Паролата изисква поне една главна буква, една малка буква и една цифра",
   "passwordMismatch": "Паролите не съвпадат",
-  "oldPasswordRequired": "Старата парола е задължителна"
+  "oldPasswordRequired": "Старата парола е задължителна",
+  "deleteAccount": "Изтрий акаунта"
 }

@@ -20,5 +20,6 @@
   "confirmPassword": "Confirm password",
   "passwordRequirements": "Password require at least one uppercase letter, one lowercase letter, and one digit",
   "passwordMismatch": "Passwords do not match",
-  "oldPasswordRequired": "Old password is required"
+  "oldPasswordRequired": "Old password is required",
+  "deleteAccount": "Delete account"
 }

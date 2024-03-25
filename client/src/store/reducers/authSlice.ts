@@ -10,6 +10,7 @@ import {
   tokenLoginApi,
   updateUserApi,
   changePasswordApi,
+  deleteUserApi,
 } from "../../api/authService";
 
 import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailRequest";
@@ -196,6 +197,29 @@ export const changePassword = createAsyncThunk(
       return data;
     } catch (error) {
       dispatch(setAuthError("An error occurred while changing the password."));
+      throw error;
+    }
+  }
+);
+
+// Action for deleting the user's account
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (id: string, { dispatch }) => {
+    try {
+      const data = await deleteUserApi(id);
+      if (data.msg && data.msg.length > 0) {
+        dispatch(setAuthError(data.msg));
+      }
+      if (data.ok) {
+        Cookies.remove("authToken");
+        dispatch(setUser(null));
+        window.location.href = "/";
+      }
+
+      return data;
+    } catch (error) {
+      dispatch(setAuthError("An error occurred while deleting the user."));
       throw error;
     }
   }

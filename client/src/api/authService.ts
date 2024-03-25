@@ -69,3 +69,17 @@ export const changePasswordApi = async (
   const data = await response.json();
   return data;
 };
+
+export const deleteUserApi = async (id: string) => {
+  const response = await fetch(`${API_BASE_URL}/users/delete`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id }),
+  });
+
+  const data = await response.json();
+
+  return data;
+};

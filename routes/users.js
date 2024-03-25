@@ -249,4 +249,26 @@ router.put("/change-password", async (req, res) => {
   }
 });
 
+// Delete user
+router.delete("/delete", async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Delete the user object
+    User.deleteOne({ _id: req.body.id })
+      .then(() => {
+        res.json({ ok: "User deleted successfully" });
+      })
+      .catch((err) => {
+        res.status(500).json({ msg: "Error during deletion." });
+      });
+  } catch (error) {
+    res.status(500).send("Server error" + error.message);
+  }
+});
+
 module.exports = router;
