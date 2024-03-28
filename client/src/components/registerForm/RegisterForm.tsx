@@ -6,9 +6,11 @@ import { registerUser, setAuthError } from "../../store/reducers/authSlice";
 import { isValidPassword, isValidUsername } from "../../utils/validation";
 import { useAppSelector } from "../../hooks/useReduxActions";
 import PasswordField from "../passwordField/PasswordField";
+import { useTranslation } from "react-i18next";
 
 const RegisterForm: RegisterFormComponent = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { error } = useAppSelector((state) => state.auth);
 
   const { formData, handleInputChange } = useFormInput<RegisterState>({
@@ -37,19 +39,19 @@ const RegisterForm: RegisterFormComponent = () => {
     };
 
     if (!isValidUsername(userdata.username)) {
-      setUsernameError("Invalid username");
+      setUsernameError("invalidUsername");
     } else {
       setUsernameError(null);
     }
 
     if (!isValidPassword(userdata.password)) {
-      setPasswordError("Invalid password");
+      setPasswordError("incorrectPassword");
     } else {
       setPasswordError(null);
     }
 
     if (userdata.password !== userdata.confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
+      setConfirmPasswordError("passwordMismatch");
     } else {
       setConfirmPasswordError(null);
     }
@@ -71,23 +73,23 @@ const RegisterForm: RegisterFormComponent = () => {
         onChange={(e) => handleInputChange(e)}
         placeholder="Username"
       />
-      {usernameError && <p className="error-text">{usernameError}</p>}
+      {usernameError && <p className="error-text">{t(usernameError)}</p>}
       <PasswordField
         name="password"
         value={formData.password}
         onChange={handleInputChange}
         placeholder="Password"
-        error={passwordError}
+        error={passwordError && t(passwordError)}
       />
       <PasswordField
         name="confirmPassword"
         value={formData.confirmPassword}
         onChange={handleInputChange}
         placeholder="Confirm password"
-        error={confirmPasswordError}
+        error={confirmPasswordError && t(confirmPasswordError)}
       />
-      <button type="submit">Register</button>
-      {error && <p className="error-text">{error}</p>}
+      <button type="submit">{t("register")}</button>
+      {error && <p className="error-text">{t(error)}</p>}
     </form>
   );
 };

@@ -2,9 +2,11 @@ import { PasswordResetComponent } from "./PasswordResetTypes";
 import { useState } from "react";
 import { resetPassword } from "../../api/resetPasswordRequest";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const PasswordReset: PasswordResetComponent = () => {
   const { token } = useParams();
+  const { t } = useTranslation();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [resetSuccess, setResetSuccess] = useState(false);
@@ -15,7 +17,7 @@ const PasswordReset: PasswordResetComponent = () => {
       // Verify the token and reset the password on the server
       const response = await resetPassword(token || "", newPassword);
       console.log(response);
-      if ("response.ok") {
+      if (response) {
         // Password reset was successful
         setResetSuccess(true);
         setResetError("");
@@ -26,20 +28,19 @@ const PasswordReset: PasswordResetComponent = () => {
         setResetError("errorData.error");
       }
     } catch (error) {
-      console.error("Password reset failed:", error);
       setResetSuccess(false);
-      setResetError("An error occurred while resetting the password.");
+      setResetError("passwordResetError");
     }
   };
 
   return (
     <div>
       {resetSuccess ? (
-        <p>Password reset successful!</p>
+        <p>{t("success.passwordReset")}</p>
       ) : (
         <>
-          <h2>Reset Your Password</h2>
-          {resetError && <p>Error: {resetError}</p>}
+          <h2>{t("resetPassword")}</h2>
+          {resetError && <p>Error: {t(resetError)}</p>}
           <input
             type="password"
             placeholder="New Password"
@@ -52,7 +53,7 @@ const PasswordReset: PasswordResetComponent = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button onClick={handlePasswordReset}>Reset Password</button>
+          <button onClick={handlePasswordReset}>{t("resetPassword")}</button>
         </>
       )}
     </div>

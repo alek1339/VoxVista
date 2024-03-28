@@ -4,10 +4,12 @@ import { useAppDispatch } from "../../hooks/useReduxActions";
 import { logoutUser } from "../../store/reducers/authSlice";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/useReduxActions";
+import { useTranslation } from "react-i18next";
 
 const Navigation: NavigationComponent = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     dispatch(logoutUser()).then(() => {
@@ -18,15 +20,15 @@ const Navigation: NavigationComponent = () => {
   const authLinks = (
     <>
       <li>
-        <Link to="/">Home</Link>
+        <Link to="/">{t("home")}</Link>
       </li>
       <li>
         <Link to="/profile-settings">
-          <i className="fas fa-user-cog"></i> Profile Settings
+          <i className="fas fa-user-cog"></i> {t("profileSettings")}
         </Link>
       </li>
       <li>
-        <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleLogout}>{t("logout")}</button>
       </li>
     </>
   );
@@ -34,10 +36,10 @@ const Navigation: NavigationComponent = () => {
   const guestLinks = (
     <>
       <li>
-        <Link to="/login">Login</Link>
+        <Link to="/login">{t("login")}</Link>
       </li>
       <li>
-        <Link to="/register">Register</Link>
+        <Link to="/register">{t("register")}</Link>
       </li>
     </>
   );
@@ -45,7 +47,7 @@ const Navigation: NavigationComponent = () => {
   const adminLinks = (
     <>
       <li>
-        <Link to="/admin">Admin</Link>
+        <Link to="/admin">{t("admin")}</Link>
       </li>
     </>
   );
