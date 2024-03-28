@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { AppDispatch } from "../../types/AuthTypes";
+import { AppDispatch } from "../../types/AppTypes";
 import Cookies from "js-cookie";
 
 import { AuthState, RegistrationData, LoginData } from "../../types/AuthTypes";
+
+import { addNotification } from "./notificationSlice";
 
 import {
   registerUserApi,
@@ -17,6 +19,8 @@ import { sendPasswordResetEmailRequest } from "../../api/sendPasswordResetEmailR
 
 import { User } from "../../types/User";
 
+import { useTranslation } from "react-i18next";
+
 const initialState: AuthState = {
   user: null,
   error: null,
@@ -24,6 +28,8 @@ const initialState: AuthState = {
   registerSuccess: false,
   loginSuccess: false,
 };
+
+const duration: number = 2500;
 
 const authSlice = createSlice({
   name: "user",
@@ -42,12 +48,6 @@ const authSlice = createSlice({
       state.passwordResetEmailSent = true;
       state.error = null;
     },
-    setRegisterSuccess: (state, action: PayloadAction<boolean>) => {
-      state.registerSuccess = action.payload;
-    },
-    clearRegisterSuccess: (state) => {
-      state.registerSuccess = false;
-    },
     setLoginSuccess: (state, action: PayloadAction<boolean>) => {
       state.loginSuccess = action.payload;
     },
@@ -62,8 +62,6 @@ export const {
   setAuthError,
   sendPasswordResetEmailFailure,
   sendPasswordResetEmailSuccess,
-  setRegisterSuccess,
-  clearRegisterSuccess,
   setLoginSuccess,
   clearLoginSuccess,
 } = authSlice.actions;
@@ -71,6 +69,10 @@ export const {
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userData: RegistrationData, { dispatch }) => {
+    const { t } = useTranslation();
+    const registrationSuccessMsg = t("registrationSuccess");
+    const registrationFailed = t("registrationFailed");
+
     try {
       const data = await registerUserApi(userData);
 
@@ -78,13 +80,20 @@ export const registerUser = createAsyncThunk(
         dispatch(setAuthError(data.msg));
       } else {
         dispatch(setAuthError(null));
-        dispatch(setRegisterSuccess(true));
         dispatch(setUser(data));
+
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            message: registrationSuccessMsg,
+            duration,
+          })
+        );
       }
 
       return data;
     } catch (error) {
-      dispatch(setAuthError("Registration failed. Please try again."));
+      dispatch(setAuthError(registrationFailed));
       throw error;
     }
   }
@@ -93,6 +102,10 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "user/login",
   async (userData: LoginData, { dispatch }) => {
+    const { t } = useTranslation();
+    const loginFailed = t("loginFailed");
+    const loginSuccessful = t("loginSuccessful");
+
     try {
       const data = await loginUserApi(userData);
       const { token } = data;
@@ -102,13 +115,25 @@ export const loginUser = createAsyncThunk(
         dispatch(setAuthError(null));
         dispatch(setLoginSuccess(true));
         dispatch(tokenLogin(token));
+
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            message: loginSuccessful,
+            duration,
+          })
+        );
+
+        setTimeout(() => {
+          dispatch(clearLoginSuccess());
+        }, duration);
       } else {
         dispatch(setAuthError(data.msg));
       }
 
       return data;
     } catch (error) {
-      dispatch(setAuthError("Login failed. Please try again."));
+      dispatch(setAuthError(loginFailed));
       throw error;
     }
   }
@@ -118,12 +143,14 @@ export const loginUser = createAsyncThunk(
 export const tokenLogin = createAsyncThunk(
   "user/tokenLogin",
   async (token: string, { dispatch }) => {
+    const { t } = useTranslation();
+    const tokenLoginFailed = t("tokenLoginFailed");
     try {
       const data = await tokenLoginApi(token);
       dispatch(setUser(data));
       return data;
     } catch (error) {
-      dispatch(setAuthError("Token login failed. Please try again."));
+      dispatch(setAuthError(tokenLoginFailed));
       throw error;
     }
   }
@@ -131,23 +158,32 @@ export const tokenLogin = createAsyncThunk(
 
 // Logout action
 export const logoutUser = () => async (dispatch: AppDispatch) => {
+  const { t } = useTranslation();
+  const logoutSuccessful = t("logoutSuccessful");
   Cookies.remove("authToken");
   dispatch(setUser(null));
+  dispatch(setAuthError(null));
+
+  dispatch(
+    addNotification({
+      id: Date.now(),
+      message: logoutSuccessful,
+      duration,
+    })
+  );
 };
 
 // Action for sending a password reset email
 export const sendPasswordResetEmail = createAsyncThunk(
   "user/sendPasswordResetEmail",
   async (email: string, { dispatch }) => {
+    const { t } = useTranslation();
+    const passwordResetError = t("passwordResetError");
     try {
       await sendPasswordResetEmailRequest(email)(dispatch);
       dispatch(sendPasswordResetEmailSuccess());
     } catch (error) {
-      dispatch(
-        sendPasswordResetEmailFailure(
-          "An error occurred while resetting the password."
-        )
-      );
+      dispatch(sendPasswordResetEmailFailure(passwordResetError));
       throw error;
     }
   }
@@ -157,18 +193,30 @@ export const sendPasswordResetEmail = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (userData: User, { dispatch }) => {
+    const { t } = useTranslation();
+    const userUpdatedSuccessfully = t("userUpdatedSuccessfully");
+    const errorUpdatingUser = t("errorUpdatingUser");
+
     try {
       const data = await updateUserApi(userData);
 
       if (data.ok) {
         dispatch(setUser(userData));
+
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            message: userUpdatedSuccessfully,
+            duration,
+          })
+        );
       } else {
-        dispatch(setAuthError("An error occurred while updating the user."));
+        dispatch(setAuthError(errorUpdatingUser));
       }
 
       return data;
     } catch (error) {
-      dispatch(setAuthError("An error occurred while updating the user."));
+      dispatch(setAuthError(errorUpdatingUser));
       throw error;
     }
   }
@@ -181,6 +229,10 @@ export const changePassword = createAsyncThunk(
     requestData: { oldPassword: string; newPassword: string; id: string },
     { dispatch }
   ) => {
+    const { t } = useTranslation();
+    const passwordChangedSuccess = t("passwordChangedSuccess");
+    const passwordChangeError = t("passwordChangeError");
+
     try {
       const data = await changePasswordApi(
         requestData.oldPassword,
@@ -192,11 +244,19 @@ export const changePassword = createAsyncThunk(
       }
       if (data.ok) {
         dispatch(setAuthError(null));
+
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            message: passwordChangedSuccess,
+            duration,
+          })
+        );
       }
 
       return data;
     } catch (error) {
-      dispatch(setAuthError("An error occurred while changing the password."));
+      dispatch(setAuthError(passwordChangeError));
       throw error;
     }
   }
@@ -206,6 +266,9 @@ export const changePassword = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   "user/deleteUser",
   async (id: string, { dispatch }) => {
+    const { t } = useTranslation();
+    const deleteUserError = t("deleteUserError");
+
     try {
       const data = await deleteUserApi(id);
       if (data.msg && data.msg.length > 0) {
@@ -219,7 +282,7 @@ export const deleteUser = createAsyncThunk(
 
       return data;
     } catch (error) {
-      dispatch(setAuthError("An error occurred while deleting the user."));
+      dispatch(setAuthError(deleteUserError));
       throw error;
     }
   }

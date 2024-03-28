@@ -1,5 +1,3 @@
-import store from "../store/store";
-import rootReducer from "../store/reducers";
 import { User } from "./User";
 export interface AuthState {
   user: User | null;
@@ -17,6 +15,3 @@ export interface LoginData {
 export interface RegistrationData extends LoginData {
   password2: string;
 }
-
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof store.dispatch;

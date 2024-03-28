@@ -8,6 +8,7 @@ const ProtectedRoute: ProtectedRouteComponent = ({
   isAdminRoute,
 }) => {
   const { user } = useAppSelector((state) => state.auth);
+
   //   If someone who is not logged try to login and register should be allowed to do so
   if (fromLoginOrRegister && user === null) {
     return children;

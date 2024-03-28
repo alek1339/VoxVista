@@ -13,7 +13,7 @@ const ChangePassword: ChangePasswordComponent = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { error } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
-  const { formData, handleInputChange } = useFormInput({
+  const { formData, handleInputChange, resetForm } = useFormInput({
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -61,7 +61,11 @@ const ChangePassword: ChangePasswordComponent = () => {
           newPassword: formData.newPassword,
           id: user?.id || "",
         })
-      );
+      ).then(() => {
+        if (!error) {
+          resetForm();
+        }
+      });
     }
   };
 

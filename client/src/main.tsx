@@ -23,6 +23,8 @@ import translation_bg from "../public/locales/bg/translation.json";
 import ProfileSettings from "./pages/profileSettings/ProfileSettings.tsx";
 import ChangePassword from "./pages/changePassword/ChangePassword.tsx";
 
+import NotificationPortal from "./components/notificationPortal/NotificationPortal.tsx";
+
 i18next.init({
   interpolation: {
     escapeValue: false,
@@ -115,6 +117,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <React.StrictMode>
       <I18nextProvider i18n={i18next}>
+        <NotificationPortal />
         <RouterProvider router={router} />
       </I18nextProvider>
     </React.StrictMode>

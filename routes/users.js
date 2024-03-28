@@ -238,7 +238,7 @@ router.put("/change-password", async (req, res) => {
           if (err) throw err;
           user.password = hash;
           user.save();
-          res.json({ msg: "Password updated successfully" });
+          res.json({ ok: "Password updated successfully" });
         });
       } else {
         return res.status(400).json({ msg: "Old password incorrect" });
